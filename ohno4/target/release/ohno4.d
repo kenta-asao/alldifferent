@@ -1,1 +1,0 @@
-/home/kenta/git/alldifferent/ohno4/target/release/ohno4: /home/kenta/git/alldifferent/ohno4/src/calculation.rs /home/kenta/git/alldifferent/ohno4/src/encoding.rs /home/kenta/git/alldifferent/ohno4/src/main.rs

@@ -1,0 +1,67 @@
+- 研究テーマ
+   - alldifferent制約の効果的な Decomposition に関する研究
+
+ - 貢献
+   - 既存手法の整理：(1)範囲伝播，(2)大野らの手法
+   - (1)と(2)を組み合わせることによって，(1)(2)単独では実現できない伝播が可能になることを証明
+   - (1)と(2)を組み合わせたもの：Range-Unused-Value propagation
+
+- 論文の構成
+  - はじめに
+  - 準備
+    - Alldifferent制約
+    - Domain Consistency
+    - Range Consistency
+  - Bessiereの方法
+  - Unused-Value propagation
+  - Range-Unused-Value propagation
+  - 評価実験
+  - おわりに
+
+- Todo
+  - [x] 日本語のA4のスタイルでタイトルと著者を書く (~8/19)
+  - [x] 準備を書く (~8/19)
+    - [x] Alldifferent制約を書く (~8/19)
+    - [x] Domain Consistencyを書く (~8/19)
+    - [x] Range Consistencyを書く (~8/19)
+  - [x] Bessiereの方法を書く (~8/22)
+  - [x] Unused-Value propagationを書く (~8/22)
+  - [x] Range-Unused-Value propagationを書く (~8/23)
+  - [x] 大野らの手法 (提案手法4) をSAT符号化するプログラムを書いてくる． (~8/25)
+  - [x] tex の資料には参考文献を充実させる．
+    - [x] LLM にも調査を頼んで，「はじめに」のところに箇条書きで関連する研究を少なくとも5個リストアップさせて bibtex にエントリーを記述させる．
+  - [x] 各例に黒点の図を入れる．(8/28)
+  - [x] DC・RCを数式で厳密な数学的な定義で書く．(8/28)
+  - [x] Colored N Queenをベンチマークとして，Bessiere，UVP，RUVPを比較．(9/1)
+  - [ ] Range CosistencyとRUVPの実験 ．(9/7)
+    - [ ] 実験条件をSlackで送る．(9/3)
+  - [ ] コードをBeamerで説明する．(9/5)
+
+ - MISC
+   - [x] Walsh らの論文を読む
+   - [x] 大野らの論文を読む
+   - [x] それぞれの論文を説明する beamer スライド資料を作る
+   - [x] Regin の論文をよむ
+   - [x] Regin の論文のスライド資料を作る
+   - [x] Christian Bessiere (IJCAI 2009) の論文をよむ
+   - [x] Christian Bessiere (IJCAI 2009) のスライド資料を作る
+   - [x] スライドを全部Slack にアップロード
+   - [x] 各手法の長所・短所を例で明らかにして，Beamer で説明する．(この場合は A でドメイン削除できるが B ではできない．またその逆)
+     - [x] 大野で枝刈りできてベシエールのRCで枝刈りできない例
+     - [x] ベシエールのRCで出来て大野で出来ない例
+     - [x] 完成次第Slackで送る．
+   - [x] 大野らの提案手法４にBessiereのRCを追加して良くなるのかの確認．
+     - [x] 小さい例でどういう制約が必要かを書き出す．
+     - [x] Beamerでまとめる．
+     - [x] 8/5(水)までにSlackで送る．
+   - [x] 大野らの手法 (提案手法4) をSAT符号化するプログラムを書いてくる．
+
+- 実験条件
+  - 範囲が $1,3,5,7,9$
+  - 範囲が $i (i=3,4,5,6,7,8,9)$ だけのもの
+  - 範囲が Max のもの
+
+- n=1のとき，nガキ数のとき，nがiだけのもの，nがマックスのとき
+  - 実験条件をslackで送る．
+  - コードをbeamerで説明する．
+    - PB制約の符号化

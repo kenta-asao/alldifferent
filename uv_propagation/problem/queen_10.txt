@@ -1,0 +1,67 @@
+# queens graph coloring problem (n=10, colors=d=10)
+domain 10
+domain 1 1 0
+domain 2 2 0
+domain 3 3 0
+domain 4 4 0
+domain 5 5 0
+domain 6 6 0
+domain 7 7 0
+domain 8 8 0
+domain 9 9 0
+domain 10 10 0
+alldifferent 1 2 3 4 5 6 7 8 9 10 0
+alldifferent 11 12 13 14 15 16 17 18 19 20 0
+alldifferent 21 22 23 24 25 26 27 28 29 30 0
+alldifferent 31 32 33 34 35 36 37 38 39 40 0
+alldifferent 41 42 43 44 45 46 47 48 49 50 0
+alldifferent 51 52 53 54 55 56 57 58 59 60 0
+alldifferent 61 62 63 64 65 66 67 68 69 70 0
+alldifferent 71 72 73 74 75 76 77 78 79 80 0
+alldifferent 81 82 83 84 85 86 87 88 89 90 0
+alldifferent 91 92 93 94 95 96 97 98 99 100 0
+alldifferent 1 11 21 31 41 51 61 71 81 91 0
+alldifferent 2 12 22 32 42 52 62 72 82 92 0
+alldifferent 3 13 23 33 43 53 63 73 83 93 0
+alldifferent 4 14 24 34 44 54 64 74 84 94 0
+alldifferent 5 15 25 35 45 55 65 75 85 95 0
+alldifferent 6 16 26 36 46 56 66 76 86 96 0
+alldifferent 7 17 27 37 47 57 67 77 87 97 0
+alldifferent 8 18 28 38 48 58 68 78 88 98 0
+alldifferent 9 19 29 39 49 59 69 79 89 99 0
+alldifferent 10 20 30 40 50 60 70 80 90 100 0
+alldifferent 9 20 0
+alldifferent 8 19 30 0
+alldifferent 7 18 29 40 0
+alldifferent 6 17 28 39 50 0
+alldifferent 5 16 27 38 49 60 0
+alldifferent 4 15 26 37 48 59 70 0
+alldifferent 3 14 25 36 47 58 69 80 0
+alldifferent 2 13 24 35 46 57 68 79 90 0
+alldifferent 1 12 23 34 45 56 67 78 89 100 0
+alldifferent 11 22 33 44 55 66 77 88 99 0
+alldifferent 21 32 43 54 65 76 87 98 0
+alldifferent 31 42 53 64 75 86 97 0
+alldifferent 41 52 63 74 85 96 0
+alldifferent 51 62 73 84 95 0
+alldifferent 61 72 83 94 0
+alldifferent 71 82 93 0
+alldifferent 81 92 0
+alldifferent 2 11 0
+alldifferent 3 12 21 0
+alldifferent 4 13 22 31 0
+alldifferent 5 14 23 32 41 0
+alldifferent 6 15 24 33 42 51 0
+alldifferent 7 16 25 34 43 52 61 0
+alldifferent 8 17 26 35 44 53 62 71 0
+alldifferent 9 18 27 36 45 54 63 72 81 0
+alldifferent 10 19 28 37 46 55 64 73 82 91 0
+alldifferent 20 29 38 47 56 65 74 83 92 0
+alldifferent 30 39 48 57 66 75 84 93 0
+alldifferent 40 49 58 67 76 85 94 0
+alldifferent 50 59 68 77 86 95 0
+alldifferent 60 69 78 87 96 0
+alldifferent 70 79 88 97 0
+alldifferent 80 89 98 0
+alldifferent 90 99 0
+# --- Constraints End ---

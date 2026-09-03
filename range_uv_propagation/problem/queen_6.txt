@@ -1,0 +1,39 @@
+# queens graph coloring problem (n=6, colors=d=6)
+domain 6
+domain 1 1 0
+domain 2 2 0
+domain 3 3 0
+domain 4 4 0
+domain 5 5 0
+domain 6 6 0
+alldifferent 1 2 3 4 5 6 0
+alldifferent 7 8 9 10 11 12 0
+alldifferent 13 14 15 16 17 18 0
+alldifferent 19 20 21 22 23 24 0
+alldifferent 25 26 27 28 29 30 0
+alldifferent 31 32 33 34 35 36 0
+alldifferent 1 7 13 19 25 31 0
+alldifferent 2 8 14 20 26 32 0
+alldifferent 3 9 15 21 27 33 0
+alldifferent 4 10 16 22 28 34 0
+alldifferent 5 11 17 23 29 35 0
+alldifferent 6 12 18 24 30 36 0
+alldifferent 5 12 0
+alldifferent 4 11 18 0
+alldifferent 3 10 17 24 0
+alldifferent 2 9 16 23 30 0
+alldifferent 1 8 15 22 29 36 0
+alldifferent 7 14 21 28 35 0
+alldifferent 13 20 27 34 0
+alldifferent 19 26 33 0
+alldifferent 25 32 0
+alldifferent 2 7 0
+alldifferent 3 8 13 0
+alldifferent 4 9 14 19 0
+alldifferent 5 10 15 20 25 0
+alldifferent 6 11 16 21 26 31 0
+alldifferent 12 17 22 27 32 0
+alldifferent 18 23 28 33 0
+alldifferent 24 29 34 0
+alldifferent 30 35 0
+# --- Constraints End ---

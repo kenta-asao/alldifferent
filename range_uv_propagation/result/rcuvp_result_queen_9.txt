@@ -1,0 +1,9 @@
+c clasp version 3.3.5
+c Reading from cnf/rcuvp_queen_9.cnf
+c Solving...
+s UNSATISFIABLE
+c 
+c Models         : 0
+c Calls          : 1
+c Time           : 1.339s (Solving: 1.25s 1st Model: 0.00s Unsat: 1.25s)
+c CPU Time       : 1.336s
