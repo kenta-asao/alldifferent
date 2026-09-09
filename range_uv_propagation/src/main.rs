@@ -18,11 +18,100 @@ fn fresh_var(n_base: i32, m: &mut i32) -> i32 {
     n_base + *m
 }
 
+// Bessiere (IJCAI 2009) の実験 (HI_k) にならい，range consistency 分解を課す
+// Hall 区間のサイズ k = u - l + 1 を制限するためのフィルタ。
+// n はその alldifferent 制約の変数の個数 (区間サイズは高々 n)。
+// unused value propagation 分解には影響しない。
+enum RangeFilter {
+    // 制限なし (デフォルト): 全てのサイズの区間に分解を課す
+    All,
+    // --only N: サイズがちょうど N の区間だけに分解を課す
+    Only(i32),
+    // --under N: サイズが N 以下の区間だけに分解を課す (論文の HI_k に対応)
+    Under(i32),
+    // --max: 各 alldifferent 制約ごとに，意味のある最大サイズ (n - 1) の区間だけに分解を課す
+    Max,
+}
+
+impl RangeFilter {
+    fn allows(&self, k: i32, n: i32) -> bool {
+        // サイズ1の Hall 区間 (「各値はちょうど1つの変数に割り当てられる」) は，
+        // range consistency 分解単体で見れば alldifferent 制約そのものを成立させる
+        // 基本制約にあたる (range_consistency クレートではこれが欠けると本来 UNSAT な
+        // 問題が誤って SAT と判定され得る)。このクレードでは unused value propagation
+        // 分解が別途 alldifferent の正しさを保証するため健全性への影響はないが，
+        // --only/--under/--max の意味を range_consistency クレートと揃えるために
+        // 同じ規則 (サイズ1は常に含める) を適用する。
+        if k == 1 {
+            return true;
+        }
+        match self {
+            RangeFilter::All => true,
+            RangeFilter::Only(size) => k == *size,
+            RangeFilter::Under(size) => k <= *size,
+            RangeFilter::Max => k == n - 1,
+        }
+    }
+
+    // 出力ファイル名に付与するサフィックス (例: "_under3")。
+    // 条件ごとに出力ファイルを分けて，異なる条件での実行結果が上書きされないようにする。
+    // フィルタなし (All) の場合は空文字列 (従来通りのファイル名のまま)。
+    fn suffix(&self) -> String {
+        match self {
+            RangeFilter::All => String::new(),
+            RangeFilter::Only(size) => format!("_only{}", size),
+            RangeFilter::Under(size) => format!("_under{}", size),
+            RangeFilter::Max => "_max".to_string(),
+        }
+    }
+}
+
+// args (プログラム名・入力ファイルパスを除いたフラグ部分) から --only/--under/--max を読み取る。
+// 3つは互いに排他 (同時に2つ以上指定するとエラー)。値を取る --only/--under は，フラグの次の
+// トークンを i32 としてパースする (欠けている・数値でない場合はエラー)。
+fn parse_range_filter(args: &[String]) -> RangeFilter {
+    let parse_value = |flag: &str| -> Option<i32> {
+        args.iter().position(|a| a == flag).map(|i| {
+            let raw = args.get(i + 1).unwrap_or_else(|| {
+                eprintln!("エラー: {} には数値を指定してください。", flag);
+                process::exit(1);
+            });
+            raw.parse::<i32>().unwrap_or_else(|_| {
+                eprintln!("エラー: {} の値 '{}' は数値ではありません。", flag, raw);
+                process::exit(1);
+            })
+        })
+    };
+
+    let only = parse_value("--only");
+    let under = parse_value("--under");
+    let max = args.iter().any(|a| a == "--max");
+
+    let specified_count = [only.is_some(), under.is_some(), max]
+        .iter()
+        .filter(|&&b| b)
+        .count();
+    if specified_count > 1 {
+        eprintln!("エラー: --only / --under / --max は同時に指定できません。どれか1つを選んでください。");
+        process::exit(1);
+    }
+
+    if let Some(n) = only {
+        RangeFilter::Only(n)
+    } else if let Some(n) = under {
+        RangeFilter::Under(n)
+    } else if max {
+        RangeFilter::Max
+    } else {
+        RangeFilter::All
+    }
+}
+
 fn main() {
     let args: Vec<String> = env::args().collect();
     if args.len() < 2 {
         eprintln!(
-            "Usage: {} <folder>/<problem_file> [--decode | --queen] [--clasp | --cadical] [--all] [--server]",
+            "Usage: {} <folder>/<problem_file> [--decode | --queen] [--clasp | --cadical] [--all] [--server] [--only N | --under N | --max]",
             args[0]
         );
         process::exit(1);
@@ -43,6 +132,8 @@ fn main() {
     }
     // --server: --cadical と併用時，ローカルビルドではなくサーバー上のバイナリを使う。
     let use_server = args[2..].iter().any(|a| a == "--server");
+    // --only/--under/--max: range consistency 分解を課す Hall 区間のサイズを制限する。
+    let range_filter = parse_range_filter(&args[2..]);
 
     let problem = parser::parse_file(input_path).unwrap_or_else(|e| {
         eprintln!("入力ファイルの解析に失敗しました: {}", e);
@@ -51,10 +142,13 @@ fn main() {
 
     // 入力パスがどんなフォルダ階層にあっても，出力はフォルダ名を持たず
     // "<問題名>.拡張子" だけにして cnf/, result/, decode/ 直下に置く。
+    // --only/--under/--max 指定時は "<問題名>_under3.拡張子" のようにサフィックスを付け，
+    // 条件違いの実行結果が同じファイルに上書きされないようにする。
     let stem = Path::new(input_path)
         .file_stem()
         .and_then(|s| s.to_str())
         .unwrap_or("output");
+    let stem = format!("{}{}", stem, range_filter.suffix());
 
     // CNF は cnf/，求解結果は result/，復号結果は decode/ フォルダに出力する。
     for dir in ["cnf", "result", "decode"] {
@@ -133,6 +227,10 @@ fn main() {
                 if u - l >= n {
                     continue;
                 }
+                let k = u - l + 1;
+                if !range_filter.allows(k, n) {
+                    continue;
+                }
 
                 let mut a_vars: Vec<i32> = Vec::new();
                 for &i in vars {
@@ -152,7 +250,6 @@ fn main() {
                     }
                 }
 
-                let k = u - l + 1;
                 if k < n {
                     let (clauses, m1) = encoding::at_most_k(a_vars, n_base, m, k);
                     cnf.add_clauses(clauses);
@@ -202,10 +299,11 @@ fn main() {
     }
     println!("CNF を書き出しました: {}", cnf_path);
 
-    // 問題ファイルのパスだけを指定した場合 (ソルバーやデコードに関するフラグが1つもない場合) は，
+    // 求解やデコードを要求するフラグ (--clasp/--cadical/--all/--decode/--queen) が1つも
+    // 指定されていない場合 (--only/--under/--max/--server だけの指定を含む) は，
     // 符号化して CNF を書き出すところまでで終了する。
-    if args.len() <= 2 {
-        println!("フラグが指定されていないため，CNF の書き出しまでで終了します。");
+    if !use_clasp && !use_cadical && !enumerate_all && !do_decode {
+        println!("求解・デコードのフラグが指定されていないため，CNF の書き出しまでで終了します。");
         return;
     }
 
