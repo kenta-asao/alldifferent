@@ -248,6 +248,20 @@ fn main() {
                     for &lit in &range_lits {
                         cnf.add_clause(vec![-lit, a]);
                     }
+
+                    // (1) の逆方向: X_i ∉ [l, u] => ¬A_{i,l,u} を，区間外のリテラルの論理和として明示する。
+                    // 上の2つの節群だけでは，区間外の値が「1つを除いて全て偽」になるまで単位伝播が
+                    // 発火せず，区間の候補が2つ以上残っている間は A が確定しない (range_consistency
+                    // クレートと同じ理由，詳細はそちらのコメント参照)。この節を加えることで，区間外が
+                    // 全て偽になった時点で単位伝播だけで A=1 を導けるようにする (論理的には既存の
+                    // 制約から導かれる冗長節)。
+                    let mut outside_clause = vec![a];
+                    for j in 1..=d {
+                        if j < l || j > u {
+                            outside_clause.push(pij[&(i, j)]);
+                        }
+                    }
+                    cnf.add_clause(outside_clause);
                 }
 
                 if k < n {

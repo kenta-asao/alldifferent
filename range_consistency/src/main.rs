@@ -244,6 +244,21 @@ fn main() {
                     for &lit in &range_lits {
                         cnf.add_clause(vec![-lit, a]);
                     }
+
+                    // (1) の逆方向: X_i ∉ [l, u] => ¬A_{i,l,u} を，区間外のリテラルの論理和として明示する。
+                    // A <=> OR(inside) という双条件自体には元々この情報が含まれている (exact-one の下で
+                    // ¬OR(inside) <=> OR(outside) が成り立つため) が，上の2つの節群だけでは区間外の値が
+                    // 「1つを除いて全て偽」になるまで単位伝播が発火しない。区間の候補が2つ以上残っている間は
+                    // A が確定せず，Theorem 1 が前提とする「(1) に DC を課す」ことを単位伝播だけでは
+                    // 実現できない。この節 (A ∨ 区間外のリテラル) を加えることで，区間外が全て偽になった
+                    // 時点で単位伝播だけで A=1 を導けるようにする (論理的には既存の制約から導かれる冗長節)。
+                    let mut outside_clause = vec![a];
+                    for j in 1..=d {
+                        if j < l || j > u {
+                            outside_clause.push(pij[&(i, j)]);
+                        }
+                    }
+                    cnf.add_clause(outside_clause);
                 }
 
                 // (2) sum_i A_{i,l,u} <= u - l + 1
