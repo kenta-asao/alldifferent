@@ -33,9 +33,10 @@
   - [x] 各例に黒点の図を入れる．(8/28)
   - [x] DC・RCを数式で厳密な数学的な定義で書く．(8/28)
   - [x] Colored N Queenをベンチマークとして，Bessiere，UVP，RUVPを比較．(9/1)
-  - [ ] Range CosistencyとRUVPの実験 ．(9/7)
-    - [ ] 実験条件をSlackで送る．(9/3)
-  - [ ] コードをBeamerで説明する．(9/5)
+  - [x] Range CosistencyとRUVPの実験 ．(9/7)
+    - [x] 実験条件をSlackで送る．(9/3)
+  - [x] コードをBeamerで説明する．(9/5)
+  - [ ] 汎対角線ラテン方陣での実験．(9/22)
 
  - MISC
    - [x] Walsh らの論文を読む

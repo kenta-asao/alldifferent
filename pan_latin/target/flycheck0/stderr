@@ -1,0 +1,7 @@
+    Blocking waiting for file lock on package cache
+   0.014250951s  INFO prepare_target{force=false package_id=pan_latin v0.1.0 (/home/kenta/git/alldifferent/pan_latin) target="pan_latin"}: cargo::core::compiler::fingerprint: fingerprint dirty for pan_latin v0.1.0 (/home/kenta/git/alldifferent/pan_latin)/Check { test: false }/TargetInner { name: "pan_latin", doc: true, ..: with_path("/home/kenta/git/alldifferent/pan_latin/src/main.rs", Edition2021) }
+   0.014268287s  INFO prepare_target{force=false package_id=pan_latin v0.1.0 (/home/kenta/git/alldifferent/pan_latin) target="pan_latin"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
+   0.014410935s  INFO prepare_target{force=false package_id=pan_latin v0.1.0 (/home/kenta/git/alldifferent/pan_latin) target="pan_latin"}: cargo::core::compiler::fingerprint: fingerprint dirty for pan_latin v0.1.0 (/home/kenta/git/alldifferent/pan_latin)/Check { test: true }/TargetInner { name: "pan_latin", doc: true, ..: with_path("/home/kenta/git/alldifferent/pan_latin/src/main.rs", Edition2021) }
+   0.014418221s  INFO prepare_target{force=false package_id=pan_latin v0.1.0 (/home/kenta/git/alldifferent/pan_latin) target="pan_latin"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(Stale)
+    Checking pan_latin v0.1.0 (/home/kenta/git/alldifferent/pan_latin)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.17s
